@@ -77,11 +77,11 @@ export default function Navbar() {
         </div>
       </nav>
       <Routes>
+        <Route path="/" element={<PopularMoviesPage />}></Route>
         <Route path="/popular" element={<PopularMoviesPage />} />
         <Route path="/toprated" element={<TopRatedMoviesPage />} />
         <Route path="/upcoming" element={<UpcomingMoviesPage />} />
         <Route path="/search" element={<SearchResult />} />{" "}
-        {/* Corrected path for search */}
         <Route path="/movie/:movieId" element={<SinglePage />} />
       </Routes>
     </BrowserRouter>
