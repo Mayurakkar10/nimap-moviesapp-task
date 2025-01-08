@@ -22,7 +22,7 @@ export default function Navbar() {
   return (
     <BrowserRouter>
       <nav
-        className="navbar navbar-expand-lg text-white"
+        className="navbar  navbar-expand-lg text-white"
         style={{ backgroundColor: "#33393F" }}
       >
         <div className="container">
