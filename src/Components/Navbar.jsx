@@ -82,7 +82,7 @@ export default function Navbar() {
         <Route path="/toprated" element={<TopRatedMoviesPage />} />
         <Route path="/upcoming" element={<UpcomingMoviesPage />} />
         <Route path="/search" element={<SearchResult />} />{" "}
-        <Route path="/movie/:movieId" element={<SinglePage />} />
+        <Route path="/singlepage/:movieId" element={<SinglePage />} />
       </Routes>
     </BrowserRouter>
   );
