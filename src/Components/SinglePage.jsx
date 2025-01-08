@@ -59,34 +59,33 @@ export default function SinglePage() {
 
   return (
     <div style={styles.pageContainer}>
-      <div style={styles.movieDetailsContainer}>
-        <img
-          src={`https://image.tmdb.org/t/p/original${movieDetails.poster_path}`}
-          alt={`${movieDetails.title} Poster`}
-          style={styles.poster}
-          onError={(e) =>
-            (e.target.src = "https://via.placeholder.com/300x450")
-          }
-        />
-        <div style={styles.details}>
-          <h1 style={styles.title}>{movieDetails.title}</h1>
-          <p style={styles.overview}>{movieDetails.overview}</p>
-          <p>
-            <strong>Release Date:</strong> {movieDetails.release_date}
-          </p>
-          <p>
-            <strong>Duration:</strong> {formatDuration(movieDetails.runtime)}
-          </p>
-          <p>
-            <strong>Rating:</strong> {movieDetails.vote_average}/10
-          </p>
-          <p>
-            <strong>Genres:</strong>{" "}
-            {movieDetails.genres.map((genre) => genre.name).join(", ")}
-          </p>
+      <div
+        style={{
+          ...styles.banner,
+          backgroundImage: `url(https://image.tmdb.org/t/p/original${movieDetails.backdrop_path})`,
+        }}
+      >
+        <div style={styles.bannerContent}>
+          <img
+            src={`https://image.tmdb.org/t/p/w200${movieDetails.poster_path}`}
+            alt={`${movieDetails.title} Poster`}
+            style={styles.poster}
+            onError={(e) =>
+              (e.target.src = "https://via.placeholder.com/200x300")
+            }
+          />
+          <div style={styles.details}>
+            <h1 style={styles.title}>{movieDetails.title}</h1>
+            <p style={styles.rating}>Rating: {movieDetails.vote_average}</p>
+            <p>{formatDuration(movieDetails.runtime)}</p>
+            <p>{movieDetails.genres.map((genre) => genre.name).join(", ")}</p>
+            <p>Release Date: {movieDetails.release_date}</p>
+            <p style={styles.overview}>{movieDetails.overview}</p>
+          </div>
         </div>
       </div>
 
+      {/* Cast Section */}
       <div style={styles.castContainer}>
         <h2 style={styles.castTitle}>Cast:</h2>
         <div style={styles.castList}>
@@ -114,20 +113,30 @@ export default function SinglePage() {
 
 const styles = {
   pageContainer: {
-    padding: "20px",
     backgroundColor: "#1c1c1c",
     color: "white",
     minHeight: "100vh",
+    padding: "0",
   },
-  movieDetailsContainer: {
+  banner: {
+    height: "500px",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
     display: "flex",
-    alignItems: "flex-start",
-    gap: "20px",
-    marginBottom: "30px",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  bannerContent: {
+    display: "flex",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    padding: "20px",
+    borderRadius: "10px",
   },
   poster: {
-    width: "300px",
+    width: "200px",
     borderRadius: "10px",
+    marginRight: "20px",
   },
   details: {
     maxWidth: "600px",
@@ -136,12 +145,17 @@ const styles = {
     fontSize: "2.5rem",
     marginBottom: "10px",
   },
+  rating: {
+    fontSize: "1.5rem",
+    marginBottom: "10px",
+  },
   overview: {
-    marginBottom: "20px",
+    marginTop: "20px",
     lineHeight: "1.6",
   },
   castContainer: {
     marginTop: "40px",
+    padding: "20px",
   },
   castTitle: {
     fontSize: "2rem",

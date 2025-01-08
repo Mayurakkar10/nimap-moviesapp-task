@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+
 export default function TopRatedMoviesPage() {
   const [movies, setMovies] = useState([]);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const apiKey = "c45a857c193f6302f2b5061c3b85e743";
 
   useEffect(() => {
-    const fetchPopularMovies = async () => {
-      const url = `https://api.themoviedb.org/3/movie/top_rated?api_key=${apiKey}&language=en-US&page=1`;
+    const fetchTopRatedMovies = async () => {
+      const url = `https://api.themoviedb.org/3/movie/top_rated?api_key=${apiKey}&language=en-US&page=${currentPage}`;
 
       try {
         const response = await fetch(url);
@@ -15,55 +18,70 @@ export default function TopRatedMoviesPage() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        console.log(data); // Log the result to inspect the data structure
         setMovies(data.results);
+        setTotalPages(data.total_pages);
       } catch (error) {
         setError(error.message);
       }
     };
 
-    fetchPopularMovies();
-  }, []);
+    fetchTopRatedMovies();
+  }, [currentPage, apiKey]);
+
+  const handlePageChange = (newPage) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
 
   return (
     <div className="container-fluid" style={{ backgroundColor: "#282C34" }}>
       <div className="container pt-5 text-white">
         {error && <p>Error: {error}</p>}
-        <div
-          style={{
-            display: "flex",
-            flexBasis: "100%",
-            flexWrap: "wrap",
-            gap: "20px",
-          }}
-        >
+        <div className="row">
           {movies.map((movie) => (
-            <div
-              key={movie.id}
-              style={{
-                padding: "10px",
-                width: "300px",
-                textAlign: "center",
-              }}
-              className="mycard"
-            >
+            <div key={movie.id} className="col-sm-6 col-md-4 col-lg-3 mb-4">
               <Link
                 to={`/singlepage/${movie.id}`}
                 className="nav-link text-white"
               >
-                <img
-                  src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
-                  alt={`${movie.title} Poster`}
-                  style={{ width: "100%", borderRadius: "10px" }}
-                  onError={(e) =>
-                    (e.target.src = "https://via.placeholder.com/200")
-                  } // Fallback for missing images
-                />
-                <h3>{movie.title}</h3>
-                <p>Rating: {movie.vote_average}</p>
+                <div className="card h-100 text-center bg-dark text-white">
+                  <img
+                    src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
+                    alt={`${movie.title} Poster`}
+                    className="card-img-top img-fluid"
+                    onError={(e) =>
+                      (e.target.src = "https://via.placeholder.com/500x750")
+                    }
+                  />
+                  <div className="card-body">
+                    <h5 className="card-title">{movie.title}</h5>
+                    <p className="card-text">Rating: {movie.vote_average}</p>
+                  </div>
+                </div>
               </Link>
             </div>
           ))}
+        </div>
+
+        <div className="d-flex justify-content-between mt-4">
+          <button
+            className="btn btn-secondary"
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+          <span className="text-white">
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            className="btn btn-secondary"
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
         </div>
       </div>
     </div>

@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import PopularMoviesPage from "./PopularMoviesPage";
 import TopRatedMoviesPage from "./TopRatedMoviesPage";
 import UpcomingMoviesPage from "./UpcomingMoviesPage";
-import SearchResult from "./SearchResult"; // New component for search results
+import SearchResult from "./SearchResult"; // Correct component for search results
 import SinglePage from "./SinglePage";
 
 export default function Navbar() {
@@ -15,14 +15,14 @@ export default function Navbar() {
 
   const handleSearchSubmit = (event) => {
     event.preventDefault();
-    // Navigate to search results with query as state
+    // Navigate to search results with query as parameter in the URL
     window.location.href = `/search?query=${searchTerm}`;
   };
 
   return (
     <BrowserRouter>
       <nav
-        className="navbar  navbar-expand-lg text-white"
+        className="navbar navbar-expand-lg text-white"
         style={{ backgroundColor: "#33393F" }}
       >
         <div className="container">
@@ -80,8 +80,9 @@ export default function Navbar() {
         <Route path="/popular" element={<PopularMoviesPage />} />
         <Route path="/toprated" element={<TopRatedMoviesPage />} />
         <Route path="/upcoming" element={<UpcomingMoviesPage />} />
-        <Route path="/search" element={<SearchResult />} />
-        <Route path="/singlepage/:movieId" element={<SinglePage />} />
+        <Route path="/search" element={<SearchResult />} />{" "}
+        {/* Corrected path for search */}
+        <Route path="/movie/:movieId" element={<SinglePage />} />
       </Routes>
     </BrowserRouter>
   );

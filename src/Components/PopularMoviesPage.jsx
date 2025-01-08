@@ -10,10 +10,10 @@ export default function PopularMoviesPage() {
 
   useEffect(() => {
     const fetchPopularMovies = async () => {
-      const url = `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=en-US&page=${currentPage}`;
-
       try {
-        const response = await fetch(url);
+        const response = await fetch(
+          `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=en-US&page=${currentPage}`
+        );
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -26,73 +26,63 @@ export default function PopularMoviesPage() {
     };
 
     fetchPopularMovies();
-  }, [apiKey, currentPage]);
+  }, [currentPage, apiKey]);
 
-  const handlePageChange = (page) => {
-    if (page > 0 && page <= totalPages) {
-      setCurrentPage(page);
+  const handlePageChange = (newPage) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setCurrentPage(newPage);
     }
   };
 
   return (
     <div className="container-fluid p-5" style={{ backgroundColor: "#282C34" }}>
-      <div className="container d-flex pt-5">
-        {error && <p>Error: {error}</p>}
-        <div
-          style={{
-            display: "flex",
-            flexBasis: "100%",
-            flexWrap: "wrap",
-            gap: "20px",
-          }}
-        >
+      <div className="container pt-5">
+        {error && <p className="text-white">Error: {error}</p>}
+        <div className="row">
           {movies.map((movie) => (
-            <div
-              key={movie.id}
-              style={{
-                padding: "10px",
-                width: "300px",
-                textAlign: "center",
-              }}
-              className="text-white mycard"
-            >
+            <div key={movie.id} className="col-sm-6 col-md-4 col-lg-3 mb-4">
               <Link
                 to={`/singlepage/${movie.id}`}
                 className="nav-link text-white"
               >
-                <img
-                  src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
-                  alt={`${movie.title} Poster`}
-                  style={{ width: "100%" }}
-                  onError={(e) =>
-                    (e.target.src = "https://via.placeholder.com/200")
-                  }
-                />
-                <h3>{movie.title}</h3>
-                <p>Rating: {movie.vote_average}</p>
+                <div className="card h-100 text-center bg-dark text-white">
+                  <img
+                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                    alt={`${movie.title} Poster`}
+                    className="card-img-top img-fluid"
+                    onError={(e) =>
+                      (e.target.src = "https://via.placeholder.com/500x750")
+                    }
+                  />
+                  <div className="card-body">
+                    <h5 className="card-title">{movie.title}</h5>
+                    <p className="card-text">Rating: {movie.vote_average}</p>
+                  </div>
+                </div>
               </Link>
             </div>
           ))}
         </div>
-      </div>
-      <div className="pagination container d-flex space-between">
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="btn btn-outline-white text-white"
-        >
-          Previous
-        </button>
-        <span className="text-white p-2">
-          Page {currentPage} of {totalPages}
-        </span>
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className="btn btn-outline-white text-white"
-        >
-          Next
-        </button>
+
+        <div className="d-flex justify-content-between mt-4">
+          <button
+            className="btn btn-secondary"
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+          <span className="text-white">
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            className="btn btn-secondary"
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );
