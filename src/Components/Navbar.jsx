@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Link,
+  useNavigate,
+} from "react-router-dom";
 import PopularMoviesPage from "./PopularMoviesPage";
 import TopRatedMoviesPage from "./TopRatedMoviesPage";
 import UpcomingMoviesPage from "./UpcomingMoviesPage";
@@ -8,6 +14,7 @@ import SinglePage from "./SinglePage";
 
 export default function Navbar() {
   const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate(); // Use navigate hook
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -15,12 +22,12 @@ export default function Navbar() {
 
   const handleSearchSubmit = (event) => {
     event.preventDefault();
-    // Navigate to search results with query as parameter in the URL
-    window.location.href = `/search?query=${searchTerm}`;
+    // Use navigate to update URL without reload
+    navigate(`/search?query=${encodeURIComponent(searchTerm)}`);
   };
 
   return (
-    <BrowserRouter>
+    <>
       <nav
         className="navbar navbar-expand-lg text-white"
         style={{ backgroundColor: "#33393F" }}
@@ -81,9 +88,9 @@ export default function Navbar() {
         <Route path="/popular" element={<PopularMoviesPage />} />
         <Route path="/toprated" element={<TopRatedMoviesPage />} />
         <Route path="/upcoming" element={<UpcomingMoviesPage />} />
-        <Route path="/search" element={<SearchResult />} />{" "}
+        <Route path="/search" element={<SearchResult />} />
         <Route path="/singlepage/:movieId" element={<SinglePage />} />
       </Routes>
-    </BrowserRouter>
+    </>
   );
 }
